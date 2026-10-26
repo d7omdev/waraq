@@ -22,7 +22,7 @@ jobs:
       PUBLIC_BASE_URL: http://localhost:3000
       NEXT_TELEMETRY_DISABLED: 1
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Build and start
         run: |
           echo "SESSION_SECRET=ci-only-session-secret-not-for-production-use" > .env
