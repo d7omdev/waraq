@@ -1,0 +1,22 @@
+[Unit]
+Description=Waraq document scanner
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=waraq
+Group=waraq
+WorkingDirectory=/opt/waraq/current
+EnvironmentFile=/etc/waraq.env
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/waraq
+
+[Install]
+WantedBy=multi-user.target

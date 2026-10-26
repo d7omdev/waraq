@@ -1,0 +1,320 @@
+@import "tailwindcss";
+
+@theme {
+  /* v3: near-black with a violet tint, one rich purple accent, soft elevation. */
+  --color-bg: #0c0b10;
+  --color-s1: #14121a;
+  --color-s2: #1b1923;
+  --color-s3: #24212e;
+  --color-s4: #2f2b3b;
+  --color-line: rgb(232 226 255 / 0.075);
+  --color-line-strong: rgb(232 226 255 / 0.13);
+  --color-ink: #efedf6;
+  --color-muted: #ada7c0;
+  --color-faint: #8c86a0;
+  --color-accent: #b9a6ff;
+  --color-accent-strong: #7c4dff;
+  --color-accent-hover: #8a5fff;
+  --color-accent-deep: #6236e0;
+  --color-accent-tint: rgb(124 77 255 / 0.16);
+  --color-paper: #f4f1ea;
+  --color-paper-ink: #2a2433;
+  --color-danger: #ff8080;
+  --color-ok: #6ee7a8;
+  --color-warn: #f6c768;
+
+  /* Radius scale: 8 / 10 / 14 / 18 / 24 */
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.125rem;
+  --radius-3xl: 1.5rem;
+
+  /* Elevation: a hairline top highlight plus a soft drop. */
+  --shadow-card: inset 0 1px 0 rgb(255 255 255 / 0.045), 0 1px 2px rgb(0 0 0 / 0.35), 0 10px 28px -16px rgb(0 0 0 / 0.75);
+  --shadow-raised: inset 0 1px 0 rgb(255 255 255 / 0.06), 0 2px 6px rgb(0 0 0 / 0.35), 0 22px 48px -18px rgb(0 0 0 / 0.85);
+  --shadow-paper: 0 1px 2px rgb(0 0 0 / 0.35), 0 10px 22px -12px rgb(0 0 0 / 0.7);
+  --shadow-glow: inset 0 1px 0 rgb(255 255 255 / 0.22), 0 8px 24px -6px rgb(124 77 255 / 0.65), 0 0 0 1px rgb(124 77 255 / 0.5);
+  --shadow-accent: inset 0 1px 0 rgb(255 255 255 / 0.18), 0 1px 2px rgb(0 0 0 / 0.4);
+
+  --font-sans: var(--font-geist-sans), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), var(--font-geist-sans), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-sheet-in: sheet-in 320ms var(--ease-out-soft);
+  --animate-fade-in: fade-in 200ms ease-out;
+  --animate-pop-in: pop-in 220ms var(--ease-out-soft);
+  --animate-toast-in: toast-in 260ms var(--ease-out-soft);
+  --animate-bar-in: bar-in 260ms var(--ease-out-soft);
+
+  @keyframes sheet-in {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes pop-in {
+    from {
+      opacity: 0;
+      transform: scale(0.97) translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes bar-in {
+    from {
+      opacity: 0;
+      transform: translateY(40%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+:root {
+  color-scheme: dark;
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  /*
+   * Height of whatever is docked to the bottom edge (bottom nav, action bars,
+   * selection bars), safe area included. Measured at runtime by useDock();
+   * this fallback matches the bottom nav so the first paint reserves room.
+   */
+  --dock-h: calc(64px + var(--sab));
+}
+@media (min-width: 1024px) {
+  :root {
+    --dock-h: 0px;
+  }
+}
+
+html {
+  background: var(--color-bg);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  /* Nothing may ever widen the page sideways. */
+  overflow-x: clip;
+}
+
+body {
+  background-color: var(--color-bg);
+  /* A faint violet light from above gives the dark canvas some depth. */
+  background-image: radial-gradient(120% 420px at 50% -180px, rgb(124 77 255 / 0.11), transparent 70%);
+  background-repeat: no-repeat;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.5;
+  font-feature-settings: "cv11", "ss01";
+  overscroll-behavior-y: none;
+  overflow-x: clip;
+}
+
+@layer components {
+/* Display face (Instrument Sans 600, slightly narrowed): page titles and the wordmark only. */
+.display {
+  font-family: var(--font-display);
+  font-weight: 560;
+  font-stretch: 94%;
+  font-variation-settings: "wdth" 94;
+  letter-spacing: -0.022em;
+  font-feature-settings: normal;
+}
+
+/* Elevated surface used by cards, groups and panels. */
+.surface {
+  background-color: var(--color-s1);
+  background-image: linear-gradient(180deg, rgb(255 255 255 / 0.025), rgb(255 255 255 / 0) 60%);
+  border: 1px solid var(--color-line);
+  box-shadow: var(--shadow-card);
+}
+.surface-raised {
+  background-color: var(--color-s2);
+  background-image: linear-gradient(180deg, rgb(255 255 255 / 0.035), rgb(255 255 255 / 0) 55%);
+  border: 1px solid var(--color-line-strong);
+  box-shadow: var(--shadow-raised);
+}
+/* Bars docked to a screen edge: opaque enough to read over content. */
+.bar {
+  background-color: rgb(17 15 23 / 0.94);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+}
+
+mark {
+  background: rgb(124 77 255 / 0.34);
+  color: var(--color-ink);
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+::selection {
+  background: rgb(124 77 255 / 0.45);
+}
+
+button,
+[role="button"] {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.skeleton {
+  background: linear-gradient(100deg, var(--color-s2) 30%, var(--color-s3) 50%, var(--color-s2) 70%);
+  background-size: 300% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0 0;
+  }
+}
+
+@keyframes shutter {
+  from {
+    opacity: 0.85;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+/* Soft right edge on horizontally scrolling rows (only on phones/tablets). */
+@media (max-width: 1023px) {
+  .fade-x {
+    mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.pt-safe {
+  padding-top: var(--sat);
+}
+.pb-safe {
+  padding-bottom: var(--sab);
+}
+/* Scroll content ends above whatever is docked at the bottom, plus air. */
+@utility pb-dock {
+  padding-bottom: calc(var(--dock-h) + 28px + var(--tray-h, 0px));
+}
+
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--color-bg),
+    0 0 0 4px rgb(185 166 255 / 0.75);
+}
+
+input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+.ocr-text {
+  unicode-bidi: plaintext;
+  line-height: 1.75;
+}
+
+.thin-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-s4) transparent;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+}
+
+/* Library grid: column count comes from prefs (data attributes). */
+.doc-grid {
+  display: grid;
+  column-gap: 0.75rem;
+  row-gap: 1.5rem;
+  grid-template-columns: repeat(var(--cols-m, 2), minmax(0, 1fr));
+}
+.doc-grid[data-cols-m="3"] {
+  column-gap: 0.5rem;
+  row-gap: 1rem;
+}
+.doc-grid[data-cols-m="4"] {
+  column-gap: 0.375rem;
+  row-gap: 0.875rem;
+}
+@media (min-width: 640px) {
+  .doc-grid {
+    column-gap: 1rem;
+    row-gap: 1.5rem;
+    grid-template-columns: repeat(max(3, var(--cols-m, 2)), minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) {
+  .doc-grid[data-cols-d="auto"] {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .doc-grid:not([data-cols-d="auto"]) {
+    grid-template-columns: repeat(min(4, var(--cols-d)), minmax(0, 1fr));
+  }
+}
+@media (min-width: 1280px) {
+  .doc-grid[data-cols-d="auto"] {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+  .doc-grid:not([data-cols-d="auto"]) {
+    grid-template-columns: repeat(var(--cols-d), minmax(0, 1fr));
+  }
+}
+@media (min-width: 1536px) {
+  .doc-grid[data-cols-d="auto"] {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+}

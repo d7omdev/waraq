@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Lint, typecheck, test, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      SESSION_SECRET: ci-only-session-secret-not-for-production-use
+      PUBLIC_BASE_URL: http://localhost:3000
+      NEXT_TELEMETRY_DISABLED: 1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: PDF and OCR tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends qpdf poppler-utils ghostscript ocrmypdf tesseract-ocr-ara tesseract-ocr-eng
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - name: Build
+        run: DATA_DIR="$RUNNER_TEMP/waraq-build" npm run build
+      - run: npm run build:ops
+
+  docker:
+    name: Docker image
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and start
+        run: |
+          echo "SESSION_SECRET=ci-only-session-secret-not-for-production-use" > .env
+          docker compose up -d --build
+      - name: Wait for health
+        run: |
+          for i in $(seq 1 40); do
+            status=$(docker inspect -f '{{.State.Health.Status}}' "$(docker compose ps -q waraq)")
+            [ "$status" = healthy ] && break
+            sleep 3
+          done
+          docker compose ps
+          curl -fsS http://127.0.0.1:3000/api/health
+          curl -fsS http://127.0.0.1:3000/api/setup | grep -q '"open":true'
+      - name: CLI inside the image
+        run: docker compose exec -T waraq node dist/ops.mjs doctor
+      - name: Logs
+        if: always()
+        run: docker compose logs --no-color | tail -100
