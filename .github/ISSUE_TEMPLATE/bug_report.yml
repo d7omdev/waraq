@@ -1,0 +1,97 @@
+name: Bug report
+description: Something in Waraq is broken or behaves unexpectedly.
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Please never attach real documents, scans, passwords, tokens or other personal data. Use demo files instead.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: A clear description of the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the library
+        2. Tap Scan
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Waraq version or commit
+      description: Shown in Settings, or run `git rev-parse --short HEAD`.
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How do you run Waraq?
+      options:
+        - Docker Compose
+        - Node.js with systemd
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      multiple: true
+      options:
+        - Scanner and camera
+        - Import and share target
+        - PDF and page editing
+        - OCR and search
+        - Folders, tags and trash
+        - Share links
+        - Google sign-in or Drive
+        - Setup, login and sessions
+        - Backup, restore and CLI
+        - Installable app and offline
+        - Other
+  - type: input
+    id: device
+    attributes:
+      label: Device and browser
+      placeholder: Pixel 8, Chrome 130 (installed app)
+  - type: input
+    id: host
+    attributes:
+      label: Server OS and architecture
+      placeholder: Ubuntu 24.04, amd64
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or `npm run doctor` output
+      description: Remove secrets, emails and file names before pasting.
+      render: shell
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: Optional. Use demo documents only.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: I removed personal data, documents and secrets from this report.
+          required: true

@@ -1,0 +1,44 @@
+name: Feature request
+description: Suggest an improvement or a new capability.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the situation, not only the solution.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Scanner and camera
+        - Import and export
+        - OCR and search
+        - Organization
+        - Sharing
+        - Google Drive
+        - Self-hosting and operations
+        - Design and accessibility
+        - Other
+  - type: checkboxes
+    id: fit
+    attributes:
+      label: Fit
+      options:
+        - label: This keeps Waraq private, with no telemetry or required third-party services.
+          required: true
+        - label: I would like to help build this.

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/d7omdev/waraq/blob/main/SECURITY.md
+    about: Please do not open a public issue for security problems. Follow the security policy instead.
+  - name: Setup and usage docs
+    url: https://github.com/d7omdev/waraq/tree/main/docs
+    about: Installation, operations, Google OAuth and how-to guides.
