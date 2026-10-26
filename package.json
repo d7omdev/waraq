@@ -40,7 +40,7 @@
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
     "@types/archiver": "^8.0.0",
-    "@types/bcryptjs": "^2.4.6",
+    "@types/bcryptjs": "^3.0.0",
     "@types/better-sqlite3": "^9.6.0",
     "@types/node": "^22.20.5",
     "@types/qrcode": "^1.5.6",
