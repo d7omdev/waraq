@@ -1,0 +1,26 @@
+services:
+  waraq:
+    build: .
+    image: waraq-community:local
+    restart: unless-stopped
+    # Loopback only: put a TLS reverse proxy in front (the camera needs HTTPS outside localhost).
+    # Set WARAQ_BIND=0.0.0.0 to expose the port directly on a trusted network.
+    ports:
+      - "${WARAQ_BIND:-127.0.0.1}:${WARAQ_PORT:-3000}:3000"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DATA_DIR: /app/data
+    volumes:
+      # named volume: created with the container user's ownership (uid 1001), survives rebuilds and `down`
+      - waraq-data:/app/data
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:3000/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  waraq-data:
